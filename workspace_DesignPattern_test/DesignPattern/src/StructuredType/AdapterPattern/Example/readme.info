@@ -1,0 +1,8 @@
+在为某学校开发教务管理系统时，开发人员发现需要对学生成绩进行排序和查找，
+该系统的设计人员已经开发了一个成绩操作接口ScoreOperation，
+在该接口中声明了排序方法Sort(int[]) 和查找方法Search(int[], int)，
+为了提高排序和查找的效率，开发人员决定重用现有算法库中的快速排序算法类QuickSortClass和二分查找算法类BinarySearchClass，
+其中QuickSortClass的QuickSort(int[])方法实现了快速排序，BinarySearchClass的BinarySearch (int[], int)方法实现了二分查找。
+ 由于某些原因，开发人员已经找不到该算法库的源代码，无法直接通过复制和粘贴操作来重用其中的代码；
+ 而且部分开发人员已经针对ScoreOperation接口编程，如果再要求对该接口进行修改或要求大家直接使用QuickSortClass类和BinarySearchClass类将导致大量代码需要修改。
+现使用适配器模式设计一个系统，在不修改已有代码的前提下将类QuickSortClass和类BinarySearchClass的相关方法适配到ScoreOperation接口中。
