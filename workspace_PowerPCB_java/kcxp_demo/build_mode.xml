@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="main" name="OtcGateWay_JDYB">
+	<target depends="compile,pack" name="main" />
+	<!--变量定义-->
+	<property name="Jar-Name" value="OtcGateWay_jdyb" />
+	<property name="Main-Class-Value" value="com.szkingdom.powerpcb.biz.jdyb._JdybMain" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
+	<!--依赖文件列表-->
+	<path id="DependentJarList">
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="../GateWayFrame/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	<path id="classpath-values">
+		<pathelement location="bin" />
+		<path refid="DependentJarList" />
+	</path>
+	<!--编译-->
+	<target name="compile">
+		<delete dir="bin" />
+		<mkdir dir="bin" />
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="src">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="classpath-values" />
+		</javac>
+	</target>
+	<!--打包-->
+	<target name="pack">
+		<mkdir dir="../../release" />
+		<!--复制依赖项-->
+		<delete dir="../../release/${Jar-Name}_lib" />
+		<mkdir dir="../../release/${Jar-Name}_lib" />
+		<copy todir="../../release/${Jar-Name}_lib">
+			<path refid="DependentJarList" />
+		</copy>
+		<!--生成MF中的Class-Path值-->
+		<pathconvert property="Class-Path-Values" pathsep=" ">
+			<mapper description="移除绝对路径+加上lib前缀">
+				<chainedmapper>
+					<flattenmapper />
+					<globmapper from="*" to="${Jar-Name}_lib/*" />
+				</chainedmapper>
+			</mapper>
+			<path refid="DependentJarList" />
+		</pathconvert>
+		<!--开始打包-->
+		<jar destfile="../../release/${Jar-Name}.jar">
+			<manifest>
+				<attribute name="Main-Class" value="${Main-Class-Value}" />
+				<attribute name="Class-Path" value=". ${Class-Path-Values}" />
+			</manifest>
+			<fileset dir="bin" />
+		</jar>
+	</target>
+</project>

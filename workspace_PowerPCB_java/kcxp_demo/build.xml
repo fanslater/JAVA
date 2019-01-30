@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="kcxp_demo" basedir="." default="main">
+	<target name="main" depends="compile,pack" />
+	<!--变量定义-->
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
+	<!--依赖文件列表-->
+	<path id="kcxp_demo.classpath">
+		<pathelement location="output" />
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	<!--编译-->
+	<target name="compile">
+		<delete dir="bin" />
+		<mkdir dir="bin" />
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="src">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="kcxp_demo.classpath" />
+		</javac>
+	</target>
+	<!--打包-->
+	<target name="pack">
+		<jar destfile="output/kcxp_demo.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.szkingdom.kcxp_demo.KcxpDemo" />
+				<attribute name="Class-Path" value=". kcxp_demo_lib/kcxpclient_2.1.1-R.jar" />
+			</manifest>
+			<fileset dir="bin" />
+		</jar>
+		<delete dir="output/kcxp_demo_lib" />
+		<mkdir dir="output/kcxp_demo_lib" />
+		<copy file="lib/kcxpclient_2.1.1-R.jar" todir="output/kcxp_demo_lib" />
+	</target>
+</project>
